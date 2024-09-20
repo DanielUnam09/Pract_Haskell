@@ -1,0 +1,108 @@
+
+-- Práctica 1 
+-- Práctica: Naturales
+
+-- Definición del tipo de dato Natural
+data Natural = Cero | S Natural deriving Show
+-- Este tipo de dato representa los números naturales de forma recursiva:
+-- Cero representa el 0, y S es el sucesor (n+1)
+
+-- Función para convertir un Integer a Natural
+a_Natural :: Integer -> Natural
+a_Natural 0 = Cero
+a_Natural n = S(a_Natural (n-1))
+-- Esta función convierte un Integer a Natural:
+-- Si es 0, devuelve Cero
+-- Si no, aplica el constructor S recursivamente n veces
+
+-- Función para convertir un Natural a Integer
+a_entero :: Natural -> Integer
+a_entero Cero = 0
+a_entero (S n) = 1 + a_entero n
+-- Esta función convierte un Natural a Integer:
+-- Si es Cero, devuelve 0
+-- Si no, suma 1 al resultado de convertir el predecesor
+
+-- Función para sumar dos Naturales
+suma_nat :: Natural -> Natural -> Natural
+suma_nat Cero n = n 
+suma_nat (S n) m = S (suma_nat n m)
+-- Esta función suma dos Naturales:
+-- Si el primer número es Cero, devuelve el segundo
+-- Si no, aplica S al resultado de sumar el predecesor del primero con el segundo
+
+-- Función para multiplicar dos Naturales
+mult_nat :: Natural -> Natural -> Natural
+mult_nat Cero _ = Cero
+mult_nat (S n) m = suma_nat (mult_nat n m) m
+-- Esta función multiplica dos Naturales:
+-- Si el primer número es Cero, devuelve Cero
+-- Si no, suma m al resultado de multiplicar el predecesor del primero por m
+
+-- Práctica: Recursión
+
+-- Función para calcular el n-ésimo número de Fibonacci
+fibo :: Integer -> Integer
+fibo n 
+    | n < 0     = error "El índice no puede ser negativo"  -- Manejo de casos inválidos
+    | n == 0    = 0  -- Caso base: el 0-ésimo número de Fibonacci es 0
+    | n == 1    = 1  -- Caso base: el 1er número de Fibonacci es 1
+    | otherwise  = fibo (n - 1) + fibo (n - 2)  -- Caso recursivo: suma de los dos números anteriores
+
+-- Función para multiplicar dos números enteros
+mult :: Integer -> Integer -> Integer
+mult n 0 = 0  -- Caso base: multiplicación por 0 siempre da 0
+mult n m 
+    | m > 0     = n + mult n (m - 1)  -- Caso recursivo para m positivo: suma n, m veces
+    | otherwise = negate (mult n (negate m))  -- Caso para m negativo: negación del resultado con m positivo
+
+-- Función para calcular el factorial de un número
+factorial :: Integer -> Integer
+factorial n 
+    | n < 0     = error "El factorial no está definido para números negativos"  -- Manejo de casos inválidos
+    | n == 0    = 1  -- Caso base: el factorial de 0 es 1
+    | otherwise  = n * factorial (n - 1)  -- Caso recursivo: n multiplicado por el factorial de (n-1)
+
+-- Función de división entera: (dividendo, divisor) -> (cociente, resto)
+division :: Integer -> Integer -> (Integer, Integer)
+division a b 
+    | b == 0    = error "División por cero"
+    | a < 0 && b < 0 = division (-a) (-b)  -- Ambos negativos: convertir a positivos
+    | a < 0     = let (q, r) = division (-a) b in (-q, -r)  -- Dividendo negativo
+    | b < 0     = let (q, r) = division a (-b) in (-q, r)   -- Divisor negativo
+    | a < b     = (0, a)  -- Dividendo menor que divisor
+    | otherwise = let (q, r) = division (a - b) b in (q + 1, r)  -- Caso general
+
+
+
+-- Función para encontrar el máximo en una lista
+maximo :: [Integer] -> Integer
+maximo []     = error "La lista está vacía"  -- Manejo de lista vacía
+maximo [x]    = x  -- Caso base: si la lista tiene un solo elemento, ese es el máximo
+maximo (x:xs) = max x (maximo xs)  -- Caso recursivo: compara el primer elemento con el máximo del resto de la lista
+
+-- Definición del tipo de dato 'ArbolB'
+data ArbolB a = Void | Nodo a (ArbolB a) (ArbolB a) deriving (Eq, Show)
+-- El tipo 'ArbolB' representa un árbol binario con dos constructores:
+--   - 'Void': representa un árbol sin nodos.
+--   - 'Nodo a (ArbolB a) (ArbolB a)': representa un nodo con un valor de tipo 'a' y dos subárboles.
+
+-- Creación de dos árboles
+t1 = Nodo "t1" Void Void
+-- 't1' es un árbol con un nodo que contiene el valor "t1" y no tiene subárboles.
+t2 = Nodo "t2" t1 t1
+-- 't2' es un árbol con un nodo que contiene el valor "t2" y tiene dos subárboles idénticos (ambos son 't1').
+
+-- Función para calcular el número de nodos en un árbol
+numeroNodos :: ArbolB a -> Int
+numeroNodos Void = 0 
+-- Si el árbol está vacío ('Void'), devuelve 0.
+numeroNodos (Nodo _ izq der) = 1 + numeroNodos izq + numeroNodos der
+-- Si el árbol es un nodo ('Nodo _ izq der'), suma 1 al resultado de 'numeroNodos izq' y 'numeroNodos der'.
+
+-- Función para calcular la profundidad (altura) del árbol
+profundidad :: ArbolB a -> Int
+profundidad Void = 0
+-- Si el árbol está vacío ('Void'), su profundidad es 0.
+profundidad (Nodo _ izq der) = 1 + max (profundidad izq) (profundidad der)
+-- Si el árbol es un nodo ('Nodo _ izq der'), toma el máximo entre las profundidades de los subárboles izquierdo y derecho, y suma 1.

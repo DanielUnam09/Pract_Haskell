@@ -7,4 +7,4 @@ Practica 1 Resuelta
 Practica 2 En resolución 
 Creen una rama con su nombre y ahí trabajan sus ejercicios, al final los checamos y hacemos el merge. 
 
-Luis = Ejercicios: 2 y 8 | Cesar = Ejercicios: 1,3,6 | Sergio = 4,5,7
+Luis = Ejercicios: 2 y 8 | Cesar = Ejercicios: 1,2,4,5 y 6 TERMINADOS | Sergio = 4,5,7

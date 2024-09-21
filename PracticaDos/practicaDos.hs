@@ -1,4 +1,6 @@
 --Agregado por becval :D
+
+import Distribution.Simple.Utils (xargs)
 data LProp = PTrue | PFalse | Var Nombre | Neg LProp
            | Conj LProp LProp | Disy LProp LProp
            | Impl LProp LProp | Syss LProp LProp
@@ -59,10 +61,20 @@ conectivos (Disy p q) = 1 + conectivos p + conectivos q
 conectivos (Impl p q) = 1 + conectivos p + conectivos q
 conectivos (Syss p q) = 1 + conectivos p + conectivos q
 
+-- Función que cuenta el número de variables en una fórmula
+variables :: LProp -> Int
+variables PTrue = 0
+variables PFalse = 0
+variables (Var _) = 1
+variables (Neg p) = variables p
+variables (Conj p q) = variables p + variables q
+variables (Disy p q) = variables p + variables q
+variables (Impl p q) = variables p + variables q
+variables (Syss p q) = variables p + variables q
+
 --Funcion  numero de 
 
 main :: IO ()
 main = do
   let formula = Conj (Var "p") (Disy (Var "q") (Neg (Var "r")))
   print $ vars formula
-

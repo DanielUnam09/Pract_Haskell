@@ -38,6 +38,17 @@ deMorgan (Disy p q) = Disy (deMorgan p) (deMorgan q)
 deMorgan (Neg p) = Neg (deMorgan p)
 deMorgan p = p
 
+-- Función para convertir implicaciones a su equivalente con conectores básicos
+equiv :: LProp -> LProp
+equiv PTrue = PTrue
+equiv PFalse = PFalse
+equiv (Var x) = Var x
+equiv (Neg p) = Neg (equiv p)
+equiv (Conj p q) = Conj (equiv p) (equiv q)
+equiv (Disy p q) = Disy (equiv p) (equiv q)
+equiv (Impl p q) = Disy (Neg (equiv p)) (equiv q)
+equiv (Syss p q) = Conj (Impl (equiv p) (equiv q)) (Impl (equiv q) (equiv p))
+
 -- Funcion de doble negacion xd
 doble_neg :: LProp -> LProp
 doble_neg PTrue = PTrue
